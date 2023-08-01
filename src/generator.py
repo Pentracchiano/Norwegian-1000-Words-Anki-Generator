@@ -1,6 +1,7 @@
 import genanki
 from pathlib import Path
-from dataclasses import dataclass
+
+from . import NorwegianWord
 
 
 class NorwegianNote(genanki.Note):
@@ -79,16 +80,6 @@ def _generate_anki_deck(norwegian_words):
         deck.add_note(note)
 
     return deck
-
-
-@dataclass
-class NorwegianWord:
-    norwegian: str
-    pronunciation: str
-    article: str
-    image: str
-    english: str
-    frequency: str
 
 
 def generate_anki_package(norwegian_words: list[NorwegianWord]) -> genanki.Package:
