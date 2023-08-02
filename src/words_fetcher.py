@@ -8,7 +8,7 @@ def _download_words(url: str) -> str:
 
 
 def _parse_words(words: str, limit: int = 1000) -> list[str]:
-    return [line[0] for line in words.split('\n')[:limit]]
+    return [line.split(' ')[0] for line in words.split('\n')[:limit]]
 
 
 def fetch_words(limit: int = 1000) -> list[str]:
@@ -20,3 +20,8 @@ def fetch_words(limit: int = 1000) -> list[str]:
     url = 'https://raw.githubusercontent.com/hermitdave/FrequencyWords/master/content/2018/no/no_50k.txt'
     words = _download_words(url)
     return _parse_words(words, limit)
+
+if __name__ == '__main__':
+    # write all words to a file in data/
+    with open('data/words.txt', 'w', encoding='utf-8') as f:
+        f.write('\n'.join(fetch_words()))
