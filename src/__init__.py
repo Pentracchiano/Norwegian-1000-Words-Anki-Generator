@@ -8,4 +8,4 @@ class NorwegianWord:
     article: str
     image: str
     english: str
-    frequency: str
+    frequency: int
