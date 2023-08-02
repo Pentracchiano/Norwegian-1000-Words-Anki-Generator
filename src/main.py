@@ -1,3 +1,4 @@
+import image_fetcher
 import words_fetcher
 import generator
 import genders
@@ -6,7 +7,7 @@ from . import NorwegianWord
 
 if __name__ == "__main__":
     words = []
-    for i, word in enumerate(fetch_words()):
+    for i, word in enumerate(words_fetcher.fetch_words()):
         entry = dictionary_api_client.lookup(word)
         article = ""
 

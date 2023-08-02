@@ -1,5 +1,5 @@
 import json
 
 
-with open("secrets.json") as f:
+with open("src/secrets.json") as f:
     secrets = json.load(f)
