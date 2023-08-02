@@ -1,5 +1,12 @@
 import requests
+from genders import Gender
+from dataclasses import dataclass
 
+
+@dataclass
+class DictionaryEntry:
+    word: str
+    genders: set[Gender] 
 
 class DictionaryAPIClient:
     """
@@ -20,14 +27,41 @@ class DictionaryAPIClient:
         response.raise_for_status()
         return response.json()["articles"]["bm"]
     
-    def article_by_id(self, id: int) -> dict:
+    def raw_article_by_id(self, id: int) -> dict:
         response = self._session.get(self._article_lookup_url.format(id))
         response.raise_for_status()
         return response.json()
     
-    def article_by_word(self, word: str) -> dict:
+    def raw_article_by_word(self, word: str) -> dict:
         ids = self.find_ids_by_word(word)
         if len(ids) == 0:
+            return {}
+        return self.raw_article_by_id(ids[0])
+    
+    def lookup(self, word: str) -> DictionaryEntry:
+        value = DictionaryEntry(word, set())  # Starting with the query word and agender (like conjunctions) 
+        info = self.raw_article_by_word(word)
+        
+        if not info:
             return None
-        return self.article_by_id(ids[0])
+        # Accumulate genders
+        for lemma in info["lemmas"]:
+            for paradigm_info in lemma["paradigm_info"]:
+                value.genders |= set(paradigm_info["tags"]) & Gender.values()
+        
+        # Possibly correct name in the query
+        if info["lemmas"]:
+            new_name = info['lemmas'][0]['lemma']
+            if new_name != word:
+                print(f"Found mismatch in name: {new_name} vs {word}")
+                # TODO decide whether to use the name from the dictionary or the query
+                # value.word = new_name 
+        return value
+    
 
+if __name__ == '__main__':
+    test = DictionaryAPIClient()
+    print(test.lookup("hund"))
+    print(test.lookup("kvinne"))
+    print(test.lookup("egg"))
+    print(test.lookup("og"))
