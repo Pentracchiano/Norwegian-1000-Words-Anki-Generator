@@ -3,18 +3,10 @@ from typing import Literal
 import requests
 import secrets_handler
 
-
-class Image:
-    def __init__(self, data: bytes, attribution = None):
-        self.data = data
-        self.attribution = attribution if attribution is not None else "Photo by Pixabay.com"
-
-    def save(self, path: str):
-        with open(path, "wb") as f:
-            f.write(self.data)
+from . import AttributedDataItem
 
 
-def fetch_image(word: str, language: str = None, image_type: Literal["photo", "illustration", "vector"] = None, retry_on_throttle=True) -> Image:
+def fetch_image(word: str, language: str = None, image_type: Literal["photo", "illustration", "vector"] = None, retry_on_throttle=True) -> AttributedDataItem:
     secret = secrets_handler.secrets["PIXABAY_API_KEY"]
     url = f"https://pixabay.com/api/"
     response = requests.get(url, params={
@@ -31,8 +23,12 @@ def fetch_image(word: str, language: str = None, image_type: Literal["photo", "i
 
     response.raise_for_status()
     content = response.json()
-    image_url = content["hits"][0]["webformatURL"]
-    return Image(_fetch_image_data(image_url, retry_on_throttle))
+    try:
+        image_url = content["hits"][0]["webformatURL"]
+        attribution = f"Photo by Pixabay.com user {content['hits'][0]['user']}."
+    except IndexError:
+        return None
+    return AttributedDataItem(_fetch_image_data(image_url, retry_on_throttle), attribution)
 
 
 def _fetch_image_data(image_url, retry_on_throttle=True):

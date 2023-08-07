@@ -69,12 +69,12 @@ def _generate_anki_deck(norwegian_words):
         note = NorwegianNote(
             model=card_model,
             fields=[
-                word['norwegian'],
-                _to_sound_field(word['pronunciation']),
-                word['article'],
-                _to_image_field(word['image']),
-                word['english'],
-                word['frequency']
+                word.norwegian,
+                _to_sound_field(word.pronunciation.path) if word.pronunciation else '',
+                word.article,
+                _to_image_field(word.image.path) if word.image else '',
+                word.english,
+                word.frequency
             ]
        )
         deck.add_note(note)
@@ -97,9 +97,8 @@ def generate_anki_package(norwegian_words: list[NorwegianWord]) -> genanki.Packa
             frequency='123'
         )
     ]
-
     """
     deck = _generate_anki_deck(norwegian_words)
     package = genanki.Package(deck)
-    package.media_files = [word.image for word in norwegian_words]
+    package.media_files = [word.image.path for word in norwegian_words] + [word.pronunciation.path for word in norwegian_words]
     return package
