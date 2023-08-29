@@ -17,6 +17,13 @@ def fetch_words(limit: int = 1000) -> list[str]:
     # P. Lison and J. Tiedemann, 2016, OpenSubtitles2016: Extracting Large Parallel Corpora from Movie and TV Subtitles. In Proceedings of the 10th International Conference on Language Resources and Evaluation (LREC 2016)
     # for the word data. 
     # TODO add this attributions to the readme too
+    # check first if data/words.txt exists
+    try:
+        with open('data/words.txt', 'r', encoding='utf-8') as f:
+            return f.read().split('\n')[:limit]
+    except FileNotFoundError:
+        print("Downloading words.txt...")
+
     url = 'https://raw.githubusercontent.com/hermitdave/FrequencyWords/master/content/2018/no/no_50k.txt'
     words = _download_words(url)
     return _parse_words(words, limit)
