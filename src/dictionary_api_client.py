@@ -49,6 +49,8 @@ class DictionaryAPIClient:
             for paradigm_info in lemma["paradigm_info"]:
                 value.genders |= set(paradigm_info["tags"]) & Gender.values()
         
+        value.genders = set(Gender(g) for g in value.genders)
+        
         # Possibly correct name in the query
         if info["lemmas"]:
             new_name = info['lemmas'][0]['lemma']

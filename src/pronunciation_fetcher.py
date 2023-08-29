@@ -1,6 +1,6 @@
 import requests
 import secrets_handler
-from . import AttributedDataItem
+from models import AttributedDataItem
 
 
 def fetch_pronunciation(word: str, language = "no") -> AttributedDataItem:

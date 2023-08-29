@@ -1,7 +1,7 @@
 import genanki
 from pathlib import Path
 
-from . import NorwegianWord
+from models import NorwegianWord
 
 
 class NorwegianNote(genanki.Note):

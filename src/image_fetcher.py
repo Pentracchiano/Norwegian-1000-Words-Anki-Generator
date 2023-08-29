@@ -3,7 +3,7 @@ from typing import Literal
 import requests
 import secrets_handler
 
-from . import AttributedDataItem
+from models import AttributedDataItem
 
 
 def fetch_image(word: str, language: str = None, image_type: Literal["photo", "illustration", "vector"] = None, retry_on_throttle=True) -> AttributedDataItem:
