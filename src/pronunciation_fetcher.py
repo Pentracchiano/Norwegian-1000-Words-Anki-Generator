@@ -1,6 +1,5 @@
 import requests
 import secrets_handler
-
 from . import AttributedDataItem
 
 
@@ -24,5 +23,3 @@ def _fetch_pronunciation_data(url: str) -> bytes:
     response = requests.get(url)
     response.raise_for_status()
     return response.content
-
-

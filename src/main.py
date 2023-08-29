@@ -1,5 +1,6 @@
 import image_fetcher
 import pronunciation_fetcher
+import translation_fetcher
 import words_fetcher
 import generator
 import dictionary_api_client
