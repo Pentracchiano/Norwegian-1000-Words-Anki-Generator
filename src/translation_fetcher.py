@@ -18,8 +18,8 @@ def fetch_translation(text: str) -> str:
             "parent": parent,
             "contents": [text],
             "mime_type": "text/plain",
-            "source_language_code": "en-US",
-            "target_language_code": "no",
+            "source_language_code": "no",
+            "target_language_code": "en-US",
         }
     )
 
